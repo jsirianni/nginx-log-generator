@@ -16,6 +16,12 @@ func main() {
 	if err != nil {
 		panic("RATE could not be converted to a float")
 	}
+	
+	durString := os.Getenv("DURATION")
+	duration, err := strconv.ParseFloat(durString, 32)
+	if err != nil {
+		panic("DURATION could not be converted to a float")
+	}
 
 	ticker := time.NewTicker(time.Second / time.Duration(rate))
 
@@ -28,6 +34,7 @@ func main() {
 	httpVersion = "HTTP/1.1"
 	referrer = "-"
 
+	startTime := time.Now()
 	for range ticker.C {
 		timeLocal = time.Now()
 
@@ -39,6 +46,10 @@ func main() {
 		userAgent = gofakeit.UserAgent()
 
 		fmt.Printf("%s - - [%s] \"%s %s %s\" %v %v \"%s\" \"%s\"\n", ip, timeLocal.Format("02/Jan/2006:15:04:05 -0700"), httpMethod, path, httpVersion, statusCode, bodyBytesSent, referrer, userAgent)
+	
+		if time.Since(startTime) > duration {
+			break	
+		}
 	}
 }
 
