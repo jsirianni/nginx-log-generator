@@ -18,7 +18,7 @@ func main() {
 	}
 	
 	durString := os.Getenv("DURATION")
-	duration, err := strconv.ParseFloat(durString, 32)
+	duration, err := strconv.Atoi(durString)
 	if err != nil {
 		panic("DURATION could not be converted to a float")
 	}
@@ -47,7 +47,7 @@ func main() {
 
 		fmt.Printf("%s - - [%s] \"%s %s %s\" %v %v \"%s\" \"%s\"\n", ip, timeLocal.Format("02/Jan/2006:15:04:05 -0700"), httpMethod, path, httpVersion, statusCode, bodyBytesSent, referrer, userAgent)
 	
-		if time.Since(startTime) > duration {
+		if int(time.Since(startTime)) > duration {
 			break	
 		}
 	}
